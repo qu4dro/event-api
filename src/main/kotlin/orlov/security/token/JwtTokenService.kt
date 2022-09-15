@@ -2,17 +2,21 @@ package orlov.security.token
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import orlov.features.user.models.AuthRequest
 import java.util.*
 
-class JwtTokenService : TokenService {
-    override fun generate(config: TokenConfig, vararg claims: TokenClaim): String {
+class JwtTokenService() : TokenService {
+
+    private val expiresIn = 365L * 1000L * 60L * 24L
+    private val secret = System.getenv("JWT_SECRET")
+    override fun generate(authRequest: AuthRequest): String {
         var token = JWT.create()
-            .withAudience(config.audience)
-            .withIssuer(config.issuer)
-            .withExpiresAt(Date(System.currentTimeMillis() + config.expiresIn))
-        claims.forEach { claim ->
-            token = token.withClaim(claim.name, claim.value)
-        }
-        return token.sign(Algorithm.HMAC256(config.secret))
+            .withSubject("Authentication")
+            .withClaim("username", authRequest.username)
+            .withExpiresAt(Date(System.currentTimeMillis() + expiresIn))
+            .withClaim("name", authRequest.username)
+
+        return token.sign(Algorithm.HMAC256(secret))
     }
 }
+

@@ -1,8 +1,9 @@
 package orlov.security.token
 
+import orlov.features.user.models.AuthRequest
+
 interface TokenService {
     fun generate(
-        config: TokenConfig,
-        vararg claims: TokenClaim
+        authRequest: AuthRequest
     ): String
 }

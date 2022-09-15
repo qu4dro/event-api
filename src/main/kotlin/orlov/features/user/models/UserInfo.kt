@@ -1,9 +1,9 @@
-package orlov.data.requests
+package orlov.features.user.models
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthRequest(
+data class UserInfo(
     val username: String,
-    val password: String
+    val id: String
 )
