@@ -1,6 +1,5 @@
 package orlov.di
 
-import io.ktor.server.application.*
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
@@ -27,10 +26,3 @@ val mainModule = module {
     single { JwtTokenService() } bind TokenService::class
 
 }
-
-//val tokenConfig = TokenConfig(
-//    issuer = environment.config.property("jwt.issuer").getString(),
-//    audience = environment.config.property("jwt.audience").getString(),
-//    expiresIn = 365L * 1000L * 60L * 24L,
-//    secret = System.getenv("JWT_SECRET")
-//)
