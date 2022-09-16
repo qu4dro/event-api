@@ -1,4 +1,4 @@
-package orlov.features.user.routes
+package orlov.features.auth.routes
 
 import io.ktor.http.*
 import io.ktor.server.application.*

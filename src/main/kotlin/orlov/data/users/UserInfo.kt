@@ -1,9 +1,9 @@
-package orlov.features.user.models
+package orlov.data.users
 
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserInfo(
-    val username: String,
-    val id: String
+    val login: String,
+    val username: String
 )

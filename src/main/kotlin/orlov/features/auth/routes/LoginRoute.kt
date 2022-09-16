@@ -1,33 +1,32 @@
-package orlov.features.user.routes
+package orlov.features.auth.routes
 
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.java.KoinJavaComponent.inject
-import orlov.features.user.models.AuthRequest
-import orlov.features.user.models.AuthResponse
-import orlov.features.user.models.UserInfo
-import orlov.features.user.repository.UserRepository
+import org.koin.java.KoinJavaComponent
+import orlov.data.users.UserInfo
+import orlov.data.users.UsersService
+import orlov.features.auth.models.LoginRequest
+import orlov.features.auth.models.LoginResponse
 import orlov.security.hashing.HashingService
 import orlov.security.hashing.SaltedHash
 import orlov.security.token.TokenService
 
-fun Route.signIn(
-) {
+fun Route.login() {
 
-    val repository: UserRepository by inject(UserRepository::class.java)
-    val hashingService: HashingService by inject(HashingService::class.java)
-    val tokenService: TokenService by inject(TokenService::class.java)
+    val hashingService: HashingService by KoinJavaComponent.inject(HashingService::class.java)
+    val tokenService: TokenService by KoinJavaComponent.inject(TokenService::class.java)
+    val usersService: UsersService by KoinJavaComponent.inject(UsersService::class.java)
 
     post("/api/v1/authentication/signin") {
-        val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
+        val request = call.receiveNullable<LoginRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@post
         }
 
-        val user = repository.getUserByUserName(request.username)
+        val user = usersService.fetchUser(request.login)
         if (user == null) {
             call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
             return@post
@@ -45,15 +44,15 @@ fun Route.signIn(
             call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
         }
 
-        val token = tokenService.generate(request)
+        val token = tokenService.generate(request.login)
 
         call.respond(
             status = HttpStatusCode.OK,
-            message = AuthResponse(
+            message = LoginResponse(
                 token = token,
                 UserInfo(
                     username = user.username,
-                    id = user.id.toString()
+                    login = user.login
                 )
             )
         )

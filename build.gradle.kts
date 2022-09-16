@@ -4,6 +4,8 @@ val logback_version: String by project
 val kmongo_version: String by project
 val koin_version: String by project
 val commons_codec_version: String by project
+val exposed_version: String by project
+val postgres_version: String by project
 
 plugins {
     application
@@ -41,10 +43,16 @@ dependencies {
     implementation("org.litote.kmongo:kmongo:$kmongo_version")
     implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
 
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+
     implementation ("io.insert-koin:koin-core:$koin_version")
     implementation ("io.insert-koin:koin-ktor:$koin_version")
     implementation ("io.insert-koin:koin-logger-slf4j:$koin_version")
 
     implementation("commons-codec:commons-codec:$commons_codec_version")
+
+    implementation("org.postgresql:postgresql:$postgres_version")
 
 }
