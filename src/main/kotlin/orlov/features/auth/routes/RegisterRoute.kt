@@ -39,7 +39,7 @@ fun Route.register() {
             try {
                 usersService.insertUser(user)
             } catch (e: ExposedSQLException) {
-                call.respond(HttpStatusCode.Conflict, "User already exists")
+                call.respond(HttpStatusCode.Conflict, "Can not signup")
                 return@post
             }
         }

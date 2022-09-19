@@ -3,6 +3,7 @@ package orlov.data.events
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import orlov.data.mapToEventDTO
 
 class EventsServiceImpl : EventsService {
 
@@ -23,17 +24,21 @@ class EventsServiceImpl : EventsService {
         return try {
             transaction {
                 val event = Events.select { Events.id.eq(id) }.single()
-                EventDTO(
-                    name = event[Events.name],
-                    description = event[Events.description],
-                    dateTime = event[Events.dateTime],
-                    creator = event[Events.creator],
-                    lng = event[Events.lng],
-                    lat = event[Events.lat]
-                )
+                event.mapToEventDTO()
             }
         } catch (e: Exception) {
             null
+        }
+    }
+
+    override fun fetchUserEvents(login: String): List<EventDTO> {
+        return try {
+            transaction {
+                val events = Events.select {Events.creator.eq(login)}.toList()
+                events.map { it.mapToEventDTO() }
+            }
+        } catch (e: Exception) {
+            listOf()
         }
     }
 

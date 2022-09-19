@@ -3,6 +3,7 @@ package orlov.data.users
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import orlov.data.mapToUserDTO
 
 class UsersServiceImpl : UsersService {
 
@@ -21,12 +22,7 @@ class UsersServiceImpl : UsersService {
         return try {
             transaction {
                 val user = Users.select { Users.login.eq(login) }.single()
-                UserDTO(
-                    password = user[Users.password],
-                    login = user[Users.login],
-                    username = user[Users.username],
-                    salt = user[Users.salt]
-                )
+                user.mapToUserDTO()
             }
         } catch (e: Exception) {
             null

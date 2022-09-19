@@ -6,4 +6,6 @@ interface EventsService {
 
     fun fetchEventById(id: Int): EventDTO?
 
+    fun fetchUserEvents(login: String): List<EventDTO>
+
 }

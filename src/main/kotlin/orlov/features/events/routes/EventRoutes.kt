@@ -7,5 +7,6 @@ fun Application.eventRoutes() {
     routing {
         createEvent()
         fetchEvent()
+        fetchUserEvents()
     }
 }
