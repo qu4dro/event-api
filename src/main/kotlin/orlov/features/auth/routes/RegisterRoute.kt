@@ -27,6 +27,7 @@ fun Route.register() {
 
         if (existingUser != null) {
             call.respond(HttpStatusCode.Conflict, "User already exists")
+            return@post
         } else {
             val saltedHash = hashingService.generateSaltedHash(request.password)
             val user = UserDTO(
@@ -39,6 +40,7 @@ fun Route.register() {
                 usersService.insertUser(user)
             } catch (e: ExposedSQLException) {
                 call.respond(HttpStatusCode.Conflict, "User already exists")
+                return@post
             }
         }
 

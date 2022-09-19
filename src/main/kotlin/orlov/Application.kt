@@ -6,6 +6,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.core.context.startKoin
 import org.slf4j.LoggerFactory
+import orlov.data.events.Events
 import orlov.di.mainModule
 import orlov.plugins.*
 import orlov.data.users.Users
@@ -22,7 +23,7 @@ fun main(args: Array<String>): Unit {
     LoggerFactory.getLogger(Application::class.simpleName).info("Initialized Database")
 
     transaction {
-        SchemaUtils.create(Users)
+        SchemaUtils.create(Users, Events)
         //Do stuff
     }
 
