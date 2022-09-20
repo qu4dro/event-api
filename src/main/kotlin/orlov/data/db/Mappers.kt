@@ -1,10 +1,8 @@
-package orlov.data
+package orlov.data.db
 
 import org.jetbrains.exposed.sql.ResultRow
-import orlov.data.events.EventDTO
-import orlov.data.events.Events
-import orlov.data.users.UserDTO
-import orlov.data.users.Users
+import orlov.data.models.EventDTO
+import orlov.data.models.UserDTO
 
 fun ResultRow.mapToEventDTO() = EventDTO(
     name = this[Events.name],

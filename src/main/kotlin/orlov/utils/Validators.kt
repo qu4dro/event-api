@@ -1,6 +1,6 @@
 package orlov.utils
 
-import orlov.data.events.EventDTO
+import orlov.data.models.EventDTO
 
 fun EventDTO.validate(): Boolean {
     if (name.isNullOrEmpty() || name.length > 100) return false

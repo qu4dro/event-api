@@ -7,15 +7,15 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.koin.java.KoinJavaComponent
-import orlov.data.users.UserDTO
-import orlov.data.users.UsersService
-import orlov.features.auth.models.RegisterRequest
+import orlov.data.models.UserDTO
+import orlov.data.dao.UsersDao
+import orlov.features.auth.RegisterRequest
 import orlov.security.hashing.HashingService
 
 fun Route.register() {
 
     val hashingService: HashingService by KoinJavaComponent.inject(HashingService::class.java)
-    val usersService: UsersService by KoinJavaComponent.inject(UsersService::class.java)
+    val usersDao: UsersDao by KoinJavaComponent.inject(UsersDao::class.java)
 
     post("/api/v1/authentication/signup") {
         val request = call.receiveNullable<RegisterRequest>() ?: kotlin.run {
@@ -23,7 +23,7 @@ fun Route.register() {
             return@post
         }
 
-        val existingUser = usersService.fetchUser(request.login)
+        val existingUser = usersDao.fetchUser(request.login)
 
         if (existingUser != null) {
             call.respond(HttpStatusCode.Conflict, "User already exists")
@@ -37,7 +37,7 @@ fun Route.register() {
                 salt = saltedHash.salt
             )
             try {
-                usersService.insertUser(user)
+                usersDao.insertUser(user)
             } catch (e: ExposedSQLException) {
                 call.respond(HttpStatusCode.Conflict, "Can not signup")
                 return@post

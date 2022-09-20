@@ -1,12 +1,13 @@
-package orlov.features.events.models
+package orlov.data.models
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateEventRequest(
+data class EventDTO(
     val name: String,
     val description: String,
     val dateTime: Long,
+    val creator: String,
     val lng: String,
     val lat: String
 )

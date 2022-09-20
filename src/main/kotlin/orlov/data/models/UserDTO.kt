@@ -1,4 +1,4 @@
-package orlov.data.users
+package orlov.data.models
 
 data class UserDTO(
     val password: String,

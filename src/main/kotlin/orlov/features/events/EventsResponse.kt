@@ -1,6 +1,12 @@
-package orlov.features.events.models
+package orlov.features.events
 
 import kotlinx.serialization.Serializable
+import orlov.data.models.EventDTO
+
+@Serializable
+data class FetchUserEventsResponse(
+    val events: List<EventDTO>
+)
 
 @Serializable
 data class FetchEventResponse(

@@ -1,14 +1,17 @@
-package orlov.data.events
+package orlov.data.dao
 
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import orlov.data.mapToEventDTO
+import orlov.data.db.DatabaseFactory.dbQuery
+import orlov.data.db.Events
+import orlov.data.db.mapToEventDTO
+import orlov.data.models.EventDTO
 
-class EventsServiceImpl : EventsService {
+class EventsDaoImpl : EventsDao {
 
-    override fun insertEvent(eventDTO: EventDTO) {
-        transaction {
+    override suspend fun insertEvent(eventDTO: EventDTO) {
+        dbQuery {
             Events.insert {
                 it[name] = eventDTO.name
                 it[description] = eventDTO.description
@@ -20,9 +23,9 @@ class EventsServiceImpl : EventsService {
         }
     }
 
-    override fun fetchEventById(id: Int): EventDTO? {
+    override suspend fun fetchEventById(id: Int): EventDTO? {
         return try {
-            transaction {
+            dbQuery {
                 val event = Events.select { Events.id.eq(id) }.single()
                 event.mapToEventDTO()
             }
@@ -31,9 +34,9 @@ class EventsServiceImpl : EventsService {
         }
     }
 
-    override fun fetchUserEvents(login: String): List<EventDTO> {
+    override suspend fun fetchUserEvents(login: String): List<EventDTO> {
         return try {
-            transaction {
+            dbQuery {
                 val events = Events.select {Events.creator.eq(login)}.toList()
                 events.map { it.mapToEventDTO() }
             }

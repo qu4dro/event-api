@@ -1,10 +1,9 @@
-package orlov.features.auth.models
+package orlov.data.models
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RegisterRequest(
-    val password: String,
+data class UserInfo(
     val login: String,
     val username: String
 )

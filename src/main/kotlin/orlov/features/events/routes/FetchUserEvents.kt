@@ -9,16 +9,14 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.koin.java.KoinJavaComponent
-import orlov.data.events.EventDTO
-import orlov.data.events.EventsService
-import orlov.features.events.models.FetchEventRequest
-import orlov.features.events.models.FetchUserEventsRequest
-import orlov.features.events.models.FetchUserEventsResponse
-import orlov.utils.validate
+import orlov.data.models.EventDTO
+import orlov.data.dao.EventsDao
+import orlov.features.events.FetchUserEventsRequest
+import orlov.features.events.FetchUserEventsResponse
 
 fun Route.fetchUserEvents() {
 
-    val eventsService: EventsService by KoinJavaComponent.inject(EventsService::class.java)
+    val eventsDao: EventsDao by KoinJavaComponent.inject(EventsDao::class.java)
 
     authenticate {
         post("/api/v1/events/user/events") {
@@ -37,7 +35,7 @@ fun Route.fetchUserEvents() {
             val events: List<EventDTO>
 
             try {
-                events = eventsService.fetchUserEvents(request.userLogin)
+                events = eventsDao.fetchUserEvents(request.userLogin)
             } catch (e: ExposedSQLException) {
                 call.respond(HttpStatusCode.Conflict, "Can not find events")
                 return@post

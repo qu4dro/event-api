@@ -8,13 +8,13 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.java.KoinJavaComponent
-import orlov.data.events.EventsService
-import orlov.features.events.models.FetchEventRequest
-import orlov.features.events.models.FetchEventResponse
+import orlov.data.dao.EventsDao
+import orlov.features.events.FetchEventRequest
+import orlov.features.events.FetchEventResponse
 
 fun Route.fetchEvent() {
 
-    val eventsService: EventsService by KoinJavaComponent.inject(EventsService::class.java)
+    val eventsDao: EventsDao by KoinJavaComponent.inject(EventsDao::class.java)
 
     authenticate {
         get("/api/v1/events/event") {
@@ -30,7 +30,7 @@ fun Route.fetchEvent() {
                 return@get
             }
 
-            val event = eventsService.fetchEventById(request.eventId)
+            val event = eventsDao.fetchEventById(request.eventId)
 
             if (event == null) {
                 call.respond(HttpStatusCode.Conflict, "Event not found")
