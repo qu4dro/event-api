@@ -20,3 +20,8 @@ data class FetchEventRequest(
 data class FetchUserEventsRequest(
     val userLogin: String
 )
+
+@Serializable
+data class FetchNearbyEventsRequest(
+    val radius: Int
+)

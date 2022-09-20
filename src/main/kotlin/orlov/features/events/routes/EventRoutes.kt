@@ -8,5 +8,6 @@ fun Application.eventRoutes() {
         createEvent()
         fetchEvent()
         fetchUserEvents()
+        fetchNearbyEvents()
     }
 }

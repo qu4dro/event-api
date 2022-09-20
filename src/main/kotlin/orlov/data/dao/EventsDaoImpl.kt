@@ -2,7 +2,7 @@ package orlov.data.dao
 
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.selectAll
 import orlov.data.db.DatabaseFactory.dbQuery
 import orlov.data.db.Events
 import orlov.data.db.mapToEventDTO
@@ -38,6 +38,17 @@ class EventsDaoImpl : EventsDao {
         return try {
             dbQuery {
                 val events = Events.select {Events.creator.eq(login)}.toList()
+                events.map { it.mapToEventDTO() }
+            }
+        } catch (e: Exception) {
+            listOf()
+        }
+    }
+
+    override suspend fun fetchNearbyEvents(): List<EventDTO> {
+        return try {
+            dbQuery {
+                val events = Events.selectAll().toList()
                 events.map { it.mapToEventDTO() }
             }
         } catch (e: Exception) {

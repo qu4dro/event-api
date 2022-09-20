@@ -10,4 +10,6 @@ interface EventsDao {
 
     suspend fun fetchUserEvents(login: String): List<EventDTO>
 
+    suspend fun fetchNearbyEvents(): List<EventDTO>
+
 }

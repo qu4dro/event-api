@@ -17,3 +17,8 @@ data class FetchEventResponse(
     val lng: String,
     val lat: String
 )
+
+@Serializable
+data class FetchNearbyEventsResponse(
+    val events: List<EventDTO>
+)
